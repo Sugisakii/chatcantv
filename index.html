@@ -30,10 +30,10 @@
     <div class="container">
         <div>
             <form onsubmit="return Onsubmit()">
-                <input type="text" id="nro" placeholder="NRO (CANTV)"><br>
+                <input type="number" maxlength="10" id="nro" placeholder="NRO (CANTV)"><br>
                 <input type="text" id="nombre" placeholder="NAME"><br>
-                <input type="text" id="mail" placeholder="MAIL"><br>
-                <input type="text" id="tlf" placeholder="Telefono (412/414/424)"><br>
+                <input type="email" id="mail" placeholder="MAIL"><br>
+                <input type="number" maxlength="10" id="tlf" placeholder="Telefono (412/414/424)"><br>
                 <select id="tipo">
                     <option value="Solicitud." selected="true">Solicitud</option>
                     <option value="natural-telefonia-solicitud. Solicitud de linea telefonica">Solicitud Linea Nueva
@@ -46,7 +46,7 @@
                     <option value="natural-Internet-solicitud. Solicitud Retiro Internet">Retiro Internet</option>
                 </select><br>
                 <button type="submit">ENVIAR</button><br>
-                <label style="font-size: 10px;">Version 1.2</label>
+                <label style="font-size: 10px;">Version 1.3</label>
             </form>
 
         </div>
