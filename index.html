@@ -16,10 +16,17 @@
             let mail = document.getElementById("mail").value
             let tlf = document.getElementById("tlf").value
             let tipo = document.getElementById("tipo").value
+            let theme = document.getElementById("theme").value
             if (typeof nro != "undefined" && typeof nombre != "undefined" && typeof mail != "undefined" && typeof tlf != "undefined" && typeof tipo != "undefined") {
                 let spliteed = tlf.split("")
                 //submited = true;
-                window.location.href = `https://chat.cantv.com.ve/chat/index.php/esp/chat/start/(theme)/1/(department)/1/(survey)/1/(sound)/1?ses_ref=//cati.cantv.com.ve/&prefill[email]=${mail}&prefill[phone]=${nro}&prefill[username]=${nombre}&prefill[question]=Viene%20de%20Cati&value_items_admin[area%20local]=undefined&value_items_admin[local]=${nro}&value_items_admin[cell]=${tlf}&value_items_admin[area%20cell]=${spliteed[0]}${spliteed[1]}${spliteed[2]}&value_items_admin[requerimiento]=${tipo}`
+
+                let url = `https://chat.cantv.com.ve/chat/index.php/esp/chat/start/(theme)/${theme}/(department)/1/(survey)/1/(sound)/1?ses_ref=//cati.cantv.com.ve/&prefill[email]=${mail}&prefill[phone]=${nro}&prefill[username]=${nombre}&prefill[question]=Viene%20de%20Cati&value_items_admin[area%20local]=undefined&value_items_admin[local]=${nro}&value_items_admin[cell]=${tlf}&value_items_admin[area%20cell]=${spliteed[0]}${spliteed[1]}${spliteed[2]}&value_items_admin[requerimiento]=${tipo}`
+                if(document.getElementById("wmode").value == 0) {
+                    window.open(url, "_blank", "scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,width=600,height=600")
+                } else {
+                    window.location.href = url;                    
+                }
             }
             return false
         }
@@ -45,8 +52,16 @@
                     <option value="natural-Internet-solicitud. Cambios de Planes Internet">Cambio de Plan Aba</option>
                     <option value="natural-Internet-solicitud. Solicitud Retiro Internet">Retiro Internet</option>
                 </select><br>
+                <select id="wmode">
+                    <option value="0" selected="true">Popup</option>
+                    <option value="1">Redirect</option>
+                </select><br>
+                <select id="theme">
+                    <option value="0">Dark</option>
+                    <option value="1" selected="true">Blue</option>
+                </select><br>
                 <button type="submit">ENVIAR</button><br>
-                <label style="font-size: 10px;">Version 1.3</label>
+                <label style="font-size: 10px;">Version 1.4</label>
             </form>
 
         </div>
