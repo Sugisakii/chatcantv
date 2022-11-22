@@ -22,13 +22,25 @@
                 //submited = true;
 
                 let url = `https://chat.cantv.com.ve/chat/index.php/esp/chat/start/(theme)/${theme}/(department)/1/(survey)/1/(sound)/1?ses_ref=//cati.cantv.com.ve/&prefill[email]=${mail}&prefill[phone]=${nro}&prefill[username]=${nombre}&prefill[question]=Viene%20de%20Cati&value_items_admin[area%20local]=undefined&value_items_admin[local]=${nro}&value_items_admin[cell]=${tlf}&value_items_admin[area%20cell]=${spliteed[0]}${spliteed[1]}${spliteed[2]}&value_items_admin[requerimiento]=${tipo}`
-                if(document.getElementById("wmode").value == 0) {
+                if (document.getElementById("wmode").value == 0) {
                     window.open(url, "_blank", "scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,width=600,height=600")
                 } else {
-                    window.location.href = url;                    
+                    window.location.href = url;
                 }
             }
             return false
+        }
+        /**
+         * @param {KeyboardEvent} event
+         * @param {HTMLElement} dom
+         * @returns boolean
+        */
+        function KeyDown(event, dom) {
+            if (dom.value.length >= 11 && (event.keyCode != 46 && event.keyCode != 8)) {
+                event.preventDefault()
+                return false;
+            }
+            return true;
         }
     </script>
 </head>
@@ -37,10 +49,12 @@
     <div class="container">
         <div>
             <form onsubmit="return Onsubmit()">
-                <input type="number" maxlength="10" id="nro" placeholder="NRO (CANTV)"><br>
+                <input type="number" maxlength="10" id="nro" placeholder="NRO (CANTV)"
+                    onkeydown="return KeyDown(event, this)"><br>
                 <input type="text" id="nombre" placeholder="NAME"><br>
                 <input type="email" id="mail" placeholder="MAIL"><br>
-                <input type="number" maxlength="10" id="tlf" placeholder="Telefono (412/414/424)"><br>
+                <input type="number" maxlength="10" id="tlf" placeholder="Telefono (412/414/424)"
+                    onkeydown="return KeyDown(event, this)"><br>
                 <select id="tipo">
                     <option value="Solicitud." selected="true">Solicitud</option>
                     <option value="natural-telefonia-solicitud. Solicitud de linea telefonica">Solicitud Linea Nueva
@@ -61,7 +75,7 @@
                     <option value="1" selected="true">Blue</option>
                 </select><br>
                 <button type="submit">ENVIAR</button><br>
-                <label style="font-size: 10px;">Version 1.4</label>
+                <label style="font-size: 10px;">Version 1.4.1</label>
             </form>
 
         </div>
