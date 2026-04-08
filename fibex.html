@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartOLT - Unified Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8fafc;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+        }
+
+        .label {
+            color: #64748b;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .value {
+            color: #1e293b;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .status-online {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .port-up {
+            color: #10b981;
+        }
+
+        .port-down {
+            color: #94a3b8;
+        }
+    </style>
+</head>
+
+<body class="p-4 md:p-8">
+
+    <div id="app" class="max-w-7xl mx-auto">
+        <div id="loader" class="text-center py-20 text-slate-500">
+            <i class="fas fa-spinner fa-spin fa-2x"></i>
+            <p class="mt-2">Procesando datos de red...</p>
+        </div>
+    </div>
+
+    <script>
+        // Simulamos los datos de tus dos endpoints
+        //const endpoint1Data = JSON.parse(["{\"full_status_info\":\"Optical status\\nModule type                    : -\\nRx optical power(dBm)          : -17.74\\nTx optical power(dBm)          : 2.78\\nTemperature(C)                 : 57\\nOLT Rx ONT optical power(dBm)  : -21.43\\nCATV Rx optical power(dBm)     : -\\n\\nONU details\\nControl flag            : active\\nRun state               : online\\nMatch state             : mismatch\\nONT distance(m)         : 1867\\nONT last distance(m)    : 1868\\nSN                      : 534B5957B81F60D3 (SKYW-B81F60D3)\\nManagement mode         : OMCI\\nDescription             : GU53320 - 25074309 - SVH\\nLast down cause         : dying-gasp\\nLast up time            : 2026-03-27 17:16:10-04:00\\nLast down time          : 2026-03-27 11:35:30-04:00\\nLast dying gasp time    : 2026-03-27 11:35:30-04:00\\nONT online duration     : 11 day(s), 3 hour(s), 24 minute(s), 27 second(s)\\nInteroperability-mode   : ITU-T\\nFEC upstream state      : use-profile-config\\nLine profile name       : SMARTOLT_FLEXIBLE_GPON\\nFEC upstream            : Enable\\nQos mode                : PQ\\nService mapping mode    : 802.1p PRI\\nService profile name    : GN630V\\nLoopback-detect         : Enable\\nLoopback auto-shutdown  : Enable\\nMulticast forward mode  : Unconcern\\n\\nHistory\\n#   UP Authentication time      Offline time                  Down reason\\n10  2026-03-27 17:16:09-04:00   ONU is currently online\\n09  2026-03-27 11:29:49-04:00   2026-03-27 11:35:30-04:00     ONT dying-gasp\\n08  2026-03-26 12:37:24-04:00   2026-03-27 11:28:05-04:00     ONT dying-gasp\\n07  2026-03-08 12:38:12-04:00   2026-03-26 12:21:24-04:00     ONT dying-gasp\\n06  2026-03-08 12:34:35-04:00   2026-03-08 12:37:41-04:00     ONT LOSi\\/LOBi alarm\\n05  2026-03-08 12:31:43-04:00   2026-03-08 12:34:05-04:00     ONT LOSi\\/LOBi alarm\\n04  2026-03-06 20:21:42-04:00   2026-03-08 12:31:09-04:00     ONT LOSi\\/LOBi alarm\\n03  2026-03-06 17:04:04-04:00   2026-03-06 20:20:15-04:00     ONT dying-gasp\\n02  2026-03-06 11:07:42-04:00   2026-03-06 13:28:02-04:00     ONT dying-gasp\\n01  2026-03-05 12:57:48-04:00   2026-03-06 11:07:10-04:00     ONT LOSi\\/LOBi alarm\\n\\nONU WAN Interfaces\\n(1)\\nName                       : 1_TR069_R_VID_200\\nService type               : Tr069\\nConnection type            : IP routed\\nIPv4 Connection status     : Connecting\\nIPv4 access type           : DHCP\\nManage VLAN                : 200\\nManage priority            : 0\\n(2)\\nName                       : 2_INTERNET_R_VID_100\\nService type               : Internet\\nConnection type            : IP routed\\nIPv4 Connection status     : Connected\\nIPv4 access type           : DHCP\\nIPv4 address               : 10.147.101.70\\nSubnet mask                : 255.255.252.0\\nDefault gateway            : 10.147.100.1\\nManage VLAN                : 100\\nManage priority            : 0\\n\\nONU LAN Interfaces status\\nPort     Type Speed(Mbps)   Duplex   LinkState  RingStatus\\n 1         GE -             -        down       noloop\\n 2         GE -             -        down       noloop\\n 3         GE 100           full     up         noloop\\n 4         GE 1000          full     up         noloop\\n\\nMACs on OLT from this ONU\\nSrv-P     Type MAC-address       Type     F \\/S \\/P   VPI  VCI      VLAN\\n11        gpon ac:fb:c2:12:aa:36 dynamic  0 \\/1 \\/8   7    1        2653\\n\",\"full_status_json\":{\"Optical status\":{\"Module type\":\"-\",\"Rx optical power(dBm)\":\"-17.74\",\"Tx optical power(dBm)\":\"2.78\",\"Temperature(C)\":\"57\",\"OLT Rx ONT optical power(dBm)\":\"-21.43\",\"CATV Rx optical power(dBm)\":\"-\"},\"ONU details\":{\"Control flag\":\"active\",\"Run state\":\"online\",\"Match state\":\"mismatch\",\"ONT distance(m)\":\"1867\",\"ONT last distance(m)\":\"1868\",\"SN\":\"534B5957B81F60D3 (SKYW-B81F60D3)\",\"Management mode\":\"OMCI\",\"Description\":\"GU53320 - 25074309 - SVH\",\"Last down cause\":\"dying-gasp\",\"Last up time\":\"2026-03-27 17:16:10-04:00\",\"Last down time\":\"2026-03-27 11:35:30-04:00\",\"Last dying gasp time\":\"2026-03-27 11:35:30-04:00\",\"ONT online duration\":\"11 day(s), 3 hour(s), 24 minute(s), 27 second(s)\",\"Interoperability-mode\":\"ITU-T\",\"FEC upstream state\":\"use-profile-config\",\"Line profile name\":\"SMARTOLT_FLEXIBLE_GPON\",\"FEC upstream\":\"Enable\",\"Qos mode\":\"PQ\",\"Service mapping mode\":\"802.1p PRI\",\"Service profile name\":\"GN630V\",\"Loopback-detect\":\"Enable\",\"Loopback auto-shutdown\":\"Enable\",\"Multicast forward mode\":\"Unconcern\"},\"History\":{\"10\":{\"Auth at\":\"2026-03-27 17:16:09-04:00\",\"Offline at\":\"\",\"Cause\":\"ONU is currently online\"},\"09\":{\"Auth at\":\"2026-03-27 11:29:49-04:00\",\"Offline at\":\"2026-03-27 11:35:30-04:00\",\"Cause\":\"ONT dying-gasp\"},\"08\":{\"Auth at\":\"2026-03-26 12:37:24-04:00\",\"Offline at\":\"2026-03-27 11:28:05-04:00\",\"Cause\":\"ONT dying-gasp\"},\"07\":{\"Auth at\":\"2026-03-08 12:38:12-04:00\",\"Offline at\":\"2026-03-26 12:21:24-04:00\",\"Cause\":\"ONT dying-gasp\"},\"06\":{\"Auth at\":\"2026-03-08 12:34:35-04:00\",\"Offline at\":\"2026-03-08 12:37:41-04:00\",\"Cause\":\"ONT LOSi\\/LOBi alarm\"},\"05\":{\"Auth at\":\"2026-03-08 12:31:43-04:00\",\"Offline at\":\"2026-03-08 12:34:05-04:00\",\"Cause\":\"ONT LOSi\\/LOBi alarm\"},\"04\":{\"Auth at\":\"2026-03-06 20:21:42-04:00\",\"Offline at\":\"2026-03-08 12:31:09-04:00\",\"Cause\":\"ONT LOSi\\/LOBi alarm\"},\"03\":{\"Auth at\":\"2026-03-06 17:04:04-04:00\",\"Offline at\":\"2026-03-06 20:20:15-04:00\",\"Cause\":\"ONT dying-gasp\"},\"02\":{\"Auth at\":\"2026-03-06 11:07:42-04:00\",\"Offline at\":\"2026-03-06 13:28:02-04:00\",\"Cause\":\"ONT dying-gasp\"},\"01\":{\"Auth at\":\"2026-03-05 12:57:48-04:00\",\"Offline at\":\"2026-03-06 11:07:10-04:00\",\"Cause\":\"ONT LOSi\\/LOBi alarm\"}},\"ONU WAN Interfaces\":{\"1\":{\"Name\":\"1_TR069_R_VID_200\",\"Service type\":\"Tr069\",\"Connection type\":\"IP routed\",\"IPv4 Connection status\":\"Connecting\",\"IPv4 access type\":\"DHCP\",\"Manage VLAN\":\"200\",\"Manage priority\":\"0\"},\"2\":{\"Name\":\"2_INTERNET_R_VID_100\",\"Service type\":\"Internet\",\"Connection type\":\"IP routed\",\"IPv4 Connection status\":\"Connected\",\"IPv4 access type\":\"DHCP\",\"IPv4 address\":\"10.147.101.70\",\"Subnet mask\":\"255.255.252.0\",\"Default gateway\":\"10.147.100.1\",\"Manage VLAN\":\"100\",\"Manage priority\":\"0\"}},\"ONU LAN Interfaces status\":{\"1\":{\"Type\":\"GE\",\"Speed\":\"-\",\"Duplex\":\"-\",\"Link state\":\"down\",\"Ring Status\":\"noloop\"},\"2\":{\"Type\":\"GE\",\"Speed\":\"-\",\"Duplex\":\"-\",\"Link state\":\"down\",\"Ring Status\":\"noloop\"},\"3\":{\"Type\":\"GE\",\"Speed\":\"100\",\"Duplex\":\"full\",\"Link state\":\"up\",\"Ring Status\":\"noloop\"},\"4\":{\"Type\":\"GE\",\"Speed\":\"1000\",\"Duplex\":\"full\",\"Link state\":\"up\",\"Ring Status\":\"noloop\"}},\"MACs on OLT from this ONU\":{\"1\":{\"Service port\":\"11\",\"Type\":\"gpon\",\"MAC address\":\"ac:fb:c2:12:aa:36\",\"Vlan\":\"2653\"}}},\"status\":true,\"response_code\":\"success\"}"][0]);
+
+        //const endpoint2Data = JSON.parse(["{\"onu_details\":{\"unique_external_id\":\"SKYWB81F60D3\",\"pon_type\":\"gpon\",\"sn\":\"SKYWB81F60D3\",\"olt_id\":\"220\",\"olt_name\":\"OLT-HUAWEI-BARBACOAS\",\"board\":\"1\",\"port\":\"8\",\"onu\":\"7\",\"onu_type_id\":\"154\",\"onu_type_name\":\"GN630V\",\"zone_id\":\"1\",\"zone_name\":\"Zone 1\",\"name\":\"GU53320 - 25074309 - SVH TECNOLOGIA BARBACOA PEDRO ALEXANDER HERNANDEZ CARBALLO\",\"address\":\"CL CALLE PRINCIPAL  SECT AURORA   SIN NuMERO   RAFAEL CALDERA\",\"contact\":null,\"latitude\":null,\"longitude\":null,\"odb_name\":\"\",\"mode\":\"Routing\",\"wan_mode\":\"Setup via ONU webpage\",\"vlan\":\"100\",\"ip_address\":null,\"subnet_mask\":null,\"default_gateway\":null,\"dns1\":null,\"dns2\":null,\"username\":null,\"password\":null,\"mgmt_ip_mode\":\"Inactive\",\"mgmt_ip_address\":null,\"mgmt_ip_subnet_mask\":null,\"mgmt_ip_default_gateway\":null,\"mgmt_ip_dns1\":null,\"mgmt_ip_dns2\":null,\"mgmt_ip_service_port\":null,\"mgmt_ip_vlan\":\"\",\"mgmt_ip_cvlan\":\"\",\"mgmt_ip_svlan\":\"\",\"mgmt_ip_tag_transform_mode\":\"\",\"voip_service\":\"Disabled\",\"voip_ip_mode\":null,\"voip_ip_address\":null,\"voip_ip_subnet_mask\":null,\"voip_ip_default_gateway\":null,\"voip_ip_dns1\":null,\"voip_ip_dns2\":null,\"voip_ip_service_port\":null,\"voip_ip_vlan\":\"\",\"voip_ip_cvlan\":\"\",\"voip_ip_svlan\":\"\",\"voip_ip_tag_transform_mode\":\"\",\"iptv\":\"OLT IPTV module disabled\",\"iptv_service_port\":null,\"iptv_vlan\":null,\"iptv_cvlan\":null,\"iptv_svlan\":null,\"iptv_tag_transform_mode\":null,\"iptv_upload_speed\":null,\"iptv_download_speed\":null,\"iptv_allowed_macs\":null,\"iptv_filtered_macs\":null,\"catv\":\"Not supported by ONU-Type\",\"custom_template_name\":null,\"administrative_status\":\"Enabled\",\"tr069\":\"Disabled\",\"tr069_profile\":null,\"authorization_date\":\"2026-01-17 16:47:31\",\"is_synced_after_import\":1,\"is_failed_resync_config\":\"0\",\"status\":\"Online\",\"signal\":\"Very good\",\"signal_1310\":-21.62,\"signal_1490\":-17.64,\"service_ports\":[{\"service_port\":\"11\",\"vlan\":\"100\",\"cvlan\":\"\",\"svlan\":\"2653\",\"tag_transform_mode\":\"translate\",\"upload_speed\":\"FTTH-1_5Gbps\",\"download_speed\":\"FTTH-1_5Gbps\"}],\"ethernet_ports\":[{\"port\":\"eth_0\\/1\",\"admin_state\":\"Enabled\",\"mode\":\"LAN\",\"dhcp\":\"No control\",\"vlan\":\"\",\"allowed_vlans\":\"\"},{\"port\":\"eth_0\\/2\",\"admin_state\":\"Enabled\",\"mode\":\"LAN\",\"dhcp\":\"No control\",\"vlan\":\"\",\"allowed_vlans\":\"\"},{\"port\":\"eth_0\\/3\",\"admin_state\":\"Enabled\",\"mode\":\"LAN\",\"dhcp\":\"No control\",\"vlan\":\"\",\"allowed_vlans\":\"\"},{\"port\":\"eth_0\\/4\",\"admin_state\":\"Enabled\",\"mode\":\"LAN\",\"dhcp\":\"No control\",\"vlan\":\"\",\"allowed_vlans\":\"\"}],\"wifi_ports\":[],\"voip_ports\":[]},\"status\":true,\"response_code\":\"success\"}"][0]);
+
+        // Función para renderizar el Dashboard
+        function renderDashboard(statusData, detailsData) {
+            const app = document.getElementById('app');
+            const ont = detailsData.onu_details;
+            const optical = statusData.full_status_json["Optical status"];
+            const wan = statusData.full_status_json["ONU WAN Interfaces"];
+            const lan = statusData.full_status_json["ONU LAN Interfaces status"];
+            const history = statusData.full_status_json["History"];
+
+            app.innerHTML = `
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                    <div>
+                        <h1 class="text-2xl font-bold text-slate-800">${ont.name}</h1>
+                        <p class="text-slate-500 font-medium"><i class="fas fa-map-marker-alt mr-2 text-slate-400"></i>${ont.address}</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <span class="status-badge px-4 py-1 rounded-full text-xs font-bold ${ont.status === 'Online' ? 'status-online' : 'bg-red-100 text-red-600'}">
+                            <i class="fas fa-circle mr-1 text-[8px]"></i> ${ont.status}
+                        </span>
+                        <div class="text-right">
+                            <p class="label">SN EQUIPO</p>
+                            <p class="text-sm font-bold text-blue-600">${ont.sn}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    
+                    <div class="lg:col-span-1 space-y-6">
+                        <div class="card p-5 border-t-4 border-indigo-500">
+                            <h3 class="font-bold text-slate-700 mb-4 uppercase text-sm tracking-wider">Potencia Óptica</h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div><p class="label">RX (Desde OLT)</p><p class="text-xl font-bold text-indigo-600">${optical["Rx optical power(dBm)"]} <span class="text-xs font-normal">dBm</span></p></div>
+                                <div><p class="label">TX (Desde ONU)</p><p class="text-xl font-bold text-slate-700">${optical["Tx optical power(dBm)"]} <span class="text-xs font-normal">dBm</span></p></div>
+                                <div><p class="label">Temp.</p><p class="value">${optical["Temperature(C)"]}°C</p></div>
+                                <div><p class="label">Distancia</p><p class="value">${statusData.full_status_json["ONU details"]["ONT distance(m)"]}m</p></div>
+                            </div>
+                        </div>
+
+                        <div class="card p-5">
+                            <h3 class="font-bold text-slate-700 mb-4 uppercase text-sm tracking-wider text-blue-600">Información OLT</h3>
+                            <div class="space-y-3">
+                                <div class="flex justify-between border-b pb-1"> <span class="label">OLT Name</span> <span class="value">${ont.olt_name}</span> </div>
+                                <div class="flex justify-between border-b pb-1"> <span class="label">Posición</span> <span class="value">F:${ont.board} / S:1 / P:${ont.port}</span> </div>
+                                <div class="flex justify-between border-b pb-1"> <span class="label">ONU ID</span> <span class="value">${ont.onu}</span> </div>
+                                <div class="flex justify-between"> <span class="label">Tipo ONU</span> <span class="value">${ont.onu_type_name}</span> </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-2 space-y-6">
+                        
+                        <div class="card overflow-hidden">
+                            <div class="bg-slate-50 px-5 py-3 border-b flex justify-between items-center">
+                                <h3 class="font-bold text-slate-700 uppercase text-xs tracking-wider">Interfaces WAN Activas</h3>
+                                <i class="fas fa-network-wired text-slate-400"></i>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left text-sm">
+                                    <thead class="bg-slate-50 text-slate-500 uppercase text-[10px]">
+                                        <tr>
+                                            <th class="px-5 py-2">Interface</th>
+                                            <th class="px-5 py-2">Status</th>
+                                            <th class="px-5 py-2">IP Address</th>
+                                            <th class="px-5 py-2">VLAN</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y">
+                                        ${Object.values(wan).map(w => `
+                                            <tr>
+                                                <td class="px-5 py-3 font-semibold text-slate-700">${w.Name}</td>
+                                                <td class="px-5 py-3">
+                                                    <span class="${w["IPv4 Connection status"] === 'Connected' ? 'text-green-600' : 'text-orange-500'} font-bold italic">
+                                                        ${w["IPv4 Connection status"]}
+                                                    </span>
+                                                </td>
+                                                <td class="px-5 py-3 font-mono text-xs">${w["IPv4 address"] || '---'}</td>
+                                                <td class="px-5 py-3">${w["Manage VLAN"]}</td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            ${Object.entries(lan).map(([num, p]) => `
+                                <div class="card p-3 text-center border-b-4 ${p["Link state"] === 'up' ? 'border-green-500' : 'border-slate-300'}">
+                                    <p class="label">Puerto ${num}</p>
+                                    <i class="fas fa-ethernet ${p["Link state"] === 'up' ? 'port-up' : 'port-down'} text-lg my-1"></i>
+                                    <p class="text-xs font-bold">${p["Link state"].toUpperCase()}</p>
+                                    <p class="text-[10px] text-slate-400">${p.Speed !== '-' ? p.Speed + ' Mbps' : 'Desconectado'}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <div class="card overflow-hidden">
+                            <div class="bg-slate-50 px-5 py-3 border-b">
+                                <h3 class="font-bold text-slate-700 uppercase text-xs tracking-wider text-red-500">Historial de Caídas (Últimas 5)</h3>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-xs text-left">
+                                    <thead class="bg-white text-slate-400">
+                                        <tr>
+                                            <th class="px-5 py-2 border-b">Uptime</th>
+                                            <th class="px-5 py-2 border-b">Downtime</th>
+                                            <th class="px-5 py-2 border-b">Causa</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y">
+                                        ${Object.values(history).slice(0, 5).map(h => `
+                                            <tr class="hover:bg-slate-50">
+                                                <td class="px-5 py-2">${h["Auth at"]}</td>
+                                                <td class="px-5 py-2">${h["Offline at"] || '<span class="text-green-500 font-bold">ACTIVO</span>'}</td>
+                                                <td class="px-5 py-2 font-medium ${h.Cause.includes('online') ? 'text-green-600' : 'text-slate-500'}">${h.Cause}</td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            `;
+        }
+
+        // Ejecutar renderización al cargar
+        window.onload = () => {
+            // 1. Obtener el serial desde la URL (ej: detail.html#/SKYWB81F60D3)
+            const serialFromUrl = window.location.hash.substring(1);
+
+            if (serialFromUrl) {
+                console.log("Cargando datos para el serial:", serialFromUrl);
+                // Aquí podrías hacer un fetch real usando ese serial:
+                // const resp = await fetch(`tu_api.php?sn=${serialFromUrl}`);
+                Promise.all([
+                    fetch(`https://api.thomas-talk.me/olt2/get_onu_details${serialFromUrl}`).then(res => res.json()),
+                    fetch(`https://api.thomas-talk.me/olt2/get_onu_full_status_info${serialFromUrl}`).then(res => res.json())
+                ]).then(([endpoint1Data, endpoint2Data]) => {
+                    renderDashboard(endpoint1Data, endpoint2Data);
+                });
+            } else {
+                document.getElementById('app').innerHTML = `
+            <div class="text-center py-20">
+                <i class="fas fa-exclamation-triangle text-orange-500 fa-3x mb-4"></i>
+                <h2 class="text-xl font-bold">No se especificó un Serial</h2>
+                <p class="text-slate-500">Por favor usa la URL con el formato: detail.html#/TU_SERIAL</p>
+            </div>
+        `;
+            }
+        };
+
+        // 3. Opcional: Recargar si el usuario cambia el serial sin refrescar la página
+        window.addEventListener('hashchange', () => {
+            location.reload();
+        });
+    </script>
+</body>
+
+</html>
