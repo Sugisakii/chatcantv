@@ -201,10 +201,8 @@
                 // Aquí podrías hacer un fetch real usando ese serial:
                 // const resp = await fetch(`tu_api.php?sn=${serialFromUrl}`);
                 Promise.all([
-                    //fetch(`https://flat-haze-b84a.sugi.workers.dev/f1?sn=${serialFromUrl}`, { mode: 'cors' }).then(res => res.json()),
-                    //fetch(`https://flat-haze-b84a.sugi.workers.dev/f2?sn=${serialFromUrl}`, { mode: 'cors' }).then(res => res.json())
-                    fetch(`http://127.0.0.1:8787/f2?sn=${serialFromUrl}`, { mode: 'cors' }).then(res => res.json()),
-                    fetch(`http://127.0.0.1:8787/f1?sn=${serialFromUrl}`, { mode: 'cors' }).then(res => res.json()),
+                    fetch(`https://flat-haze-b84a.sugi.workers.dev/f2?sn=${serialFromUrl}`, { mode: 'cors' }).then(res => res.json()),
+                    fetch(`https://flat-haze-b84a.sugi.workers.dev/f1?sn=${serialFromUrl}`, { mode: 'cors' }).then(res => res.json())
                 ]).then(([endpoint1Data, endpoint2Data]) => {
 
                     renderDashboard(JSON.parse(endpoint1Data), JSON.parse(endpoint2Data));
