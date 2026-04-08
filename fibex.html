@@ -200,8 +200,8 @@
                 // Aquí podrías hacer un fetch real usando ese serial:
                 // const resp = await fetch(`tu_api.php?sn=${serialFromUrl}`);
                 Promise.all([
-                    fetch(`https://api.thomas-talk.me/olt2/get_onu_details${serialFromUrl}`, { mode: 'cors' }).then(res => res.json()),
-                    fetch(`https://api.thomas-talk.me/olt2/get_onu_full_status_info${serialFromUrl}`, { mode: 'cors' }).then(res => res.json())
+                    fetch(`https://flat-haze-b84a.sugi.workers.dev/f1?sn=${serialFromUrl}`, { mode: 'cors' }).then(res => res.json()),
+                    fetch(`https://flat-haze-b84a.sugi.workers.dev/f2?sn=${serialFromUrl}`, { mode: 'cors' }).then(res => res.json())
                 ]).then(([endpoint1Data, endpoint2Data]) => {
                     renderDashboard(endpoint1Data, endpoint2Data);
                 });
